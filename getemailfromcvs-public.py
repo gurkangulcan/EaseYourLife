@@ -5,6 +5,8 @@
 #it basically matches a regular expression for e-mail addresses.
 #if you need to remove unnecessary e-mails with specific wording 
 #you can use removelist.
+#outlook puts Exchange server details in case the contact is taken from it
+#the script is not taking care of these contacts and e-mails. use responsibly.
 import os
 import re
 import string
