@@ -64,7 +64,7 @@ def returncolumn(colnum=1):
 
 def parsecsv():
     print('reading')
-    filepath='C:\\Users\\ggulcan\\Dropbox\\GitFolder\\TextAnalyzer\\worldcities.csv'
+    filepath='C:\\csvfilepath\\csvfile.csv'
     error=readcsvfile(filepath)
     if error:
         print(error)
