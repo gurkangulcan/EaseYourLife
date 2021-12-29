@@ -27,6 +27,7 @@ def checkremoving(newmail):
         if p.search(newmail):
             print(f'removed:{newmail}')
             text=''
+            break
         else:
             text=newmail
     return text
@@ -41,7 +42,7 @@ def runmyscript():
     winpath='C:\\somepathofcsvfile\\contacts.csv'
     email=''
     if os.path.exists(winpath):
-        contacts=open(winpath, 'r')
+        contacts=open(winpath, 'r',codec='utf-8')
         linecount=0
         for line in contacts:
             linecount += 1
