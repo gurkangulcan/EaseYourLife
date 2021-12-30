@@ -9,11 +9,12 @@
 #the script is not taking care of these contacts and e-mails. use responsibly.
 import os
 import re
+import math
 import string
 from io import StringIO
 
 #put unnecessary items into this list
-removelist = ['googlegroups', 'yahoogroups', 'info@', 'contact@', 'travel@', 'bilgi@', 'resort']
+removelist = ['googlegroups', 'yahoogroups', 'info@', 'contact@', 'travel@', 'bilgi@', 'resort', 'help', 'siparis' ]
 
 def main():
     runmyscript()
@@ -36,13 +37,39 @@ def checkremoving(newmail):
 def addsemicolumn(newmail):
     return '; ' + newmail
 
-
+def printseperated(text, seperator, count):
+    wholetext=''
+    splitted=text.split('; ')
+    numofemails=len(splitted)
+    seperatorcount=math.ceil(numofemails / count)
+    i=0
+    while i < seperatorcount :
+        ji=1
+        if ( i != seperatorcount-1):
+            while (i*count+ji) <= count*(i+1) :
+                if (ji <= count):
+                    wholetext += addsemicolumn(splitted[i*count+ji])
+                else:
+                    wholetext += splitted[i*count+ji]
+                ji += 1
+        else:
+            while (i*count+ji) < numofemails :
+                if (ji <= count):
+                    wholetext += addsemicolumn(splitted[i*count+ji])
+                else:
+                    wholetext += splitted[i*count+ji]
+                ji += 1
+               
+        if ((i*count+ji) < numofemails-1):
+            wholetext += '\n\nNEXT BUNCH:\n'
+        i += 1
+    print(wholetext)
 
 def runmyscript():
-    winpath='C:\\somepathofcsvfile\\contacts.csv'
+    winpath='C:\\Users\\ggulcan\\Dropbox\\contacts.csv'
     email=''
     if os.path.exists(winpath):
-        contacts=open(winpath, 'r',codec='utf-8')
+        contacts=open(winpath, 'r', encoding='utf-8')
         linecount=0
         for line in contacts:
             linecount += 1
@@ -73,11 +100,15 @@ def runmyscript():
                             if firstmail != eachmail:
                                 email += addsemicolumn(eachmail)
                                 newline = True
+            else:
+                print('NOT LIST\n')
         print(f'Processed {linecount} lines.')                        
         contacts.close()
     else:
         email +='File does not exist'
-    
-    print(email)
+#sometimes mail servers dont allow more than some number of e-mail addresses in one e-mail.
+#automatic splitting is possible, based on the below number
+    numofemailinonechunk=350
+    printseperated(email,'; ', numofemailinonechunk)
 
 if __name__ == '__main__': main()
