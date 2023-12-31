@@ -1,0 +1,36 @@
+function myFunction() {
+//31.12.2023 by Gurkan Gulcan
+//This function runs in Google Apps script space.
+//It checks unread e-mails with a subject called "Expenses". 
+//Then gets the attachments of the file and adds the files to google drive whereever your Expenses folder is.
+//If you don't have an expense folder it creates the folder under the root directory.
+//at the end marks the e-mail as read.
+
+var threads = GmailApp.search('is:unread');
+var messages = GmailApp.getMessagesForThreads(threads)
+Logger.log('number of unread threads: "%s"', threads.length);
+   for (var j = 0; j < messages.length; j++) {
+      for (var l = 0; l < messages[j].length; l++) {
+        if(messages[j][l].getFrom().indexOf('my.email@address.com') > -1 && messages[j][l].getSubject()=="Expenses"){
+          var attachments = messages[j][l].getAttachments();
+          for (var k = 0; k < attachments.length; k++) {
+            Logger.log('Message "%s" contains the attachment "%s" (%s bytes)',
+            messages[j][l].getSubject(), attachments[k].getName(), attachments[k].getSize());
+            if(DriveApp.getFoldersByName("Expenses").length == 0){
+              var folder = DriveApp.createFolder("Expenses");
+              }
+            var folders = DriveApp.getFolders();
+            while (folders.hasNext()) {
+              var folder = folders.next();
+              if (folder.getName() == "Expenses") {
+                Logger.log(folder.getName());
+                var myfile = attachments[k].copyBlob();
+                var file = folder.createFile(myfile.setName(attachments[k].getName())); 
+                }
+              }
+            }
+            messages[j][l].markRead()
+        }         
+      }
+  }
+}
