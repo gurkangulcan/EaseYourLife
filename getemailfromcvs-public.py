@@ -66,7 +66,7 @@ def printseperated(text, seperator, count):
     print(wholetext)
 
 def runmyscript():
-    winpath='C:\\Users\\ggulcan\\Dropbox\\contacts.csv'
+    winpath='C:\\contacts.csv'
     email=''
     if os.path.exists(winpath):
         contacts=open(winpath, 'r', encoding='utf-8')
